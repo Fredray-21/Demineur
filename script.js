@@ -1,14 +1,33 @@
 $(document).ready(function () {
     createTray();
     placemine();
-    placeNumber();
 
+    // $("#container div").each(function () {
+    //     if ($(this).attr("data-num") != undefined) {
+    //         $(this).text($(this).attr("data-num"));
+    //     }
+    // });
 
     $("#container div").click(function () {
-        const arrayAround = getAround($(this));
-        console.log(arrayAround);
+        // const arrayAround = getAround($(this));
+
+        if ($(this).attr("class") == "mine") {
+            alert("Perdu");
+        } else if ($(this).data("num") != undefined) {
+            $(this).text($(this).data("num"));
+            $(this).css("background-color", "lightgoldenrodyellow");
+        } else {
+            $(this).css("background-color", "lightgoldenrodyellow");
+            // a faire view all around epmty
+        }
     }
-    );
+    )
+
+    $("#container div").contextmenu(function (ev) {
+        ev.preventDefault();
+        $(this).css("background-color", "blue");
+    }
+    )
 });
 
 function createTray() {
@@ -19,13 +38,6 @@ function createTray() {
         }
         $("#container").append(divv);
     }
-}
-function placeNumber() {
-    $("#container div").each(function () {
-        if ($(this).attr("data-num") != undefined && $(this).attr("class") != "mine") {
-            $(this).text($(this).attr("data-num"));
-        }
-    });
 }
 
 function placemine() {
@@ -41,16 +53,18 @@ function placemine() {
         }
     }
     arraymine.forEach(e => {
-        $("#container div").eq(e).attr("class", "mine"), $("#container div").eq(e).css("background-color", "red");
+        $("#container div").eq(e).attr("class", "mine")
+        //s $("#container div").eq(e).css("background-color", "red");
         const arrayAround = getAround($("#container div").eq(e));
         arrayAround.forEach(e => {
-            if (e >= 0 && e < 225) {
+            if (e >= 0 && e < 225 && $("#container div").eq(e).attr("class") != "mine") {
                 if ($("#container div").eq(e).attr("data-num") == undefined) {
                     $("#container div").eq(e).attr("data-num", 0);
                 }
                 $("#container div").eq(e).attr("data-num", parseInt($("#container div").eq(e).attr("data-num")) + 1);
             }
         });
+        $("#container div").eq(e).attr("data-num", "M");
     });
 }
 
